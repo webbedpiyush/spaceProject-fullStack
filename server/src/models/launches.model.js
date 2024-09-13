@@ -37,16 +37,22 @@ async function saveLaunch(launch) {
     throw new Error("no matching planets was found");
   }
 
-  await launches.updateOne({ flightNumber: launch.flightNumber }, launch, {
-    upsert: true,
-  });
+  await launches.findOneAndUpdate(
+    { flightNumber: launch.flightNumber },
+    launch,
+    {
+      upsert: true,
+    }
+  );
+
+  launches.find;
 }
 
 async function scheduleNewLaunch(launch) {
-  const newFlightNumber = (await getLatestFlightNumber()) + 1;
+  const newFlightNumber = Number(await getLatestFlightNumber()) + 1;
   const newLaunch = {
     ...launch,
-    success: true,
+    succes: true,
     upcoming: true,
     customers: ["ME", "ISRO"],
     flightNumber: newFlightNumber,
@@ -54,15 +60,29 @@ async function scheduleNewLaunch(launch) {
   await saveLaunch(newLaunch);
 }
 
-function launchAbortByLaunchId(id) {
-  const aborted = launches.get(id);
-  aborted.upcoming = false;
-  aborted.success = false;
-  return aborted;
+async function launchAbortByLaunchId(id) {
+  // const aborted = launches.get(id);
+  // aborted.upcoming = false;
+  // aborted.success = false;
+  // return aborted;
+  const aborted = await launches.updateOne(
+    {
+      flightNumber: id,
+    },
+    {
+      upcoming: false,
+      succes: false,
+    }
+  );
+  // console.log(aborted);
+  return aborted.acknowledged && aborted.modifiedCount === 1;
 }
 
-function launchExistByLaunchID(id) {
-  return launches.has(id);
+async function launchExistByLaunchID(id) {
+  return await launches.findOne({
+    flightNumber: id,
+  });
+  // return launches.has(id);
 }
 
 async function getLatestFlightNumber() {
