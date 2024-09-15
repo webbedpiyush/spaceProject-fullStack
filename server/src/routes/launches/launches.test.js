@@ -14,7 +14,7 @@ describe("launches API test", () => {
   describe("grouping karo bhai", () => {
     test("test 1", async () => {
       const response = await request(app)
-        .get("/launches")
+        .get("/v1/launches")
         .expect("Content-Type", /json/)
         .expect(200);
       // the supertest provides us some http assertions
@@ -37,7 +37,7 @@ describe("launches API test", () => {
     };
     test("POST /launches", async () => {
       const response = await request(app)
-        .post("/launches")
+        .post("/v1/launches")
         .send(fullLaunchData)
         .expect(201);
       expect(response.body).toMatchObject(LaunchDatawithoutDate);
@@ -51,7 +51,7 @@ describe("launches API test", () => {
     test("test 1 something related to ", () => {});
     test("test 2 error related", async () => {
       const response = await request(app)
-        .post("/launches")
+        .post("/v1/launches")
         .send(LaunchDatawithoutDate)
         .expect(400)
         .expect("Content-Type", /json/);
