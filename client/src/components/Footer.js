@@ -8,7 +8,7 @@ const Footer = () => {
       <Centered>
         <Paragraph style={{ fontSize: 14, margin: "10px 0" }}>
           This is not an official site , just made for my learning purpose.
-          <a
+          <Link
             style={{
               marginLeft: "15px",
               color: "rgb(38, 218, 253)",
@@ -22,7 +22,7 @@ const Footer = () => {
             rel="noreferrer"
           >
             Github
-          </a>
+          </Link>
         </Paragraph>
       </Centered>
     </ArwesFooter>
